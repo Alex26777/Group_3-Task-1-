@@ -1,0 +1,72 @@
+# Функція для розбору введення користувача
+def parse_input(user_input):
+    # Відділяє команду від аргументів
+    parts = user_input.strip().split()
+    command = parts[0].lower()  # Команду переводимо до нижнього регістру
+    args = parts[1:]  # Всі аргументи після команди
+    return command, args
+
+# Функція для додавання контакту
+def add_contact(args, contacts):
+    if len(args) == 2:
+        name, phone = args
+        contacts[name] = phone  # Зберігаємо ім'я та номер у словнику
+        return "Контакт додано."
+    else:
+        return "Невірні аргументи. Очікується 'add [ім'я] [номер телефону]'."
+
+# Функція для зміни контакту
+def change_contact(args, contacts):
+    if len(args) == 2:
+        name, phone = args
+        if name in contacts:
+            contacts[name] = phone  # Оновлюємо номер телефону для існуючого контакту
+            return "Контакт оновлено."
+        else:
+            return "Контакт не знайдено."
+    else:
+        return "Невірні аргументи. Очікується 'change [ім'я] [новий номер телефону]'."
+
+# Функція для показу номера телефону
+def show_phone(args, contacts):
+    if len(args) == 1:
+        name = args[0]
+        if name in contacts:
+            return contacts[name]  # Повертаємо номер телефону для запитаного контакту
+        else:
+            return "Контакт не знайдено."
+    else:
+        return "Невірні аргументи. Очікується 'phone [ім'я]'."
+
+# Функція для показу всіх контактів
+def show_all(contacts):
+    return '\n'.join(f'{name}: {phone}' for name, phone in contacts.items()) if contacts else "Контактів не знайдено."
+
+# Головна функція програми
+def main():
+    contacts = {}  # Словник для зберігання контактів
+    print("Ласкаво просимо до бота-помічника!")
+
+    while True:  # Нескінченний цикл для обробки команд
+        user_input = input("Введіть команду: ")
+        command, args = parse_input(user_input)
+
+        if command in ["close", "exit"]:
+            print("До побачення!")
+            break
+        elif command == "hello":
+            print("Як я можу допомогти?")
+        elif command == "add":
+            print(add_contact(args, contacts))
+        elif command == "change":
+            print(change_contact(args, contacts))
+        elif command == "phone":
+            print(show_phone(args, contacts))
+        elif command == "all":
+            print(show_all(contacts))
+        else:
+            print("Невірна команда.")
+
+# Точка входу в програму
+if __name__ == "__main__":
+    main()
